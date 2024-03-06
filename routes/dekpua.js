@@ -329,9 +329,10 @@ async function updateStatusOtp(discordId, email, ref, OtpStatus) {
 
 function sendEmail(emailTo, subject, text, html) {
   const transporter = nodemailer.createTransport({
+    service: 'gmail',
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
-    secure: false, // true for 465, false for other ports
+    secure: true, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER, // Your email address
       pass: process.env.EMAIL_PASS, // Your email password or an app-specific password
