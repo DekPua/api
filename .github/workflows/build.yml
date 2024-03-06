@@ -21,7 +21,6 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t hewkawar/dekpua-api:latest .
-        working-directory: ./Dockerfile
 
       - name: Push Docker image
         run: docker push hewkawar/dekpua-api:latest
