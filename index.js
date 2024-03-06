@@ -12,8 +12,10 @@ app.get("/robots.txt", (req, res) => {
 });
 
 const dekpuaRouter = require("./routes/dekpua");
+const autoPublistRouter = require("./routes/autopublist");
 
 app.use("/dekpua", dekpuaRouter);
+app.use("/autopublist", autoPublistRouter);
 
 const PORT = process.env.PORT ?? 3000;
 app.listen(PORT, () => {

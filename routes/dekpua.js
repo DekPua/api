@@ -294,20 +294,37 @@ async function newOtp(discordId, ref, email, Otp) {
 }
 
 async function updateStatusOtp(discordId, email, ref, OtpStatus) {
-  return new Promise((resolve, reject) => {
-    database.query(
-      "UPDATE `otp` SET `verified`= ?, `updated_at` = CURRENT_TIMESTAMP WHERE `discord_id` = ? AND `email` = ? AND `ref` = ?",
-      [OtpStatus, discordId, email, ref],
-      (err, results) => {
-        if (err) {
-          console.error("Error executing MySQL query:", err);
-          reject(err);
-        } else {
-          resolve(results);
+  if (email) {
+    return new Promise((resolve, reject) => {
+      database.query(
+        "UPDATE `otp` SET `verified`= ?, `updated_at` = CURRENT_TIMESTAMP WHERE `discord_id` = ? AND `email` = ? AND `ref` = ?",
+        [OtpStatus, discordId, email, ref],
+        (err, results) => {
+          if (err) {
+            console.error("Error executing MySQL query:", err);
+            reject(err);
+          } else {
+            resolve(results);
+          }
         }
-      }
-    );
-  });
+      );
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      database.query(
+        "UPDATE `otp` SET `verified`= ?, `updated_at` = CURRENT_TIMESTAMP WHERE `discord_id` = ? AND `ref` = ?",
+        [OtpStatus, discordId, ref],
+        (err, results) => {
+          if (err) {
+            console.error("Error executing MySQL query:", err);
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        }
+      );
+    });
+  }
 }
 
 function sendEmail(emailTo, subject, text, html) {
@@ -464,7 +481,7 @@ router.post("/login/otp", async (req, res) => {
 
     return res.status(200).json({ verify: true });
   } else {
-    await updateStatusOtp(discordId, email, ref, OtpStatusType.Fail);
+    await updateStatusOtp(discordId, null, ref, OtpStatusType.Fail);
 
     return res.status(401).json({ verify: false });
   }
