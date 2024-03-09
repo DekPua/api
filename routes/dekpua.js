@@ -341,7 +341,7 @@ function sendEmail(emailTo, subject, text, html) {
 
   // Email options
   const mailOptions = {
-    from: process.env.EMAIL_SENDER, // Sender address
+    from: `${process.env.EMAIL_SENDER_NAME} <${process.env.EMAIL_SENDER}>`, // Sender address
     to: emailTo, // Recipient address
     subject: subject, // Subject line
     text: text, // Plain text body
