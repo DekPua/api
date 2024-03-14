@@ -20,7 +20,7 @@ async function getAccessToken(code) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-    }).catch((error) => { });
+    }).catch((error) => console.error(error));
 
     if (output && output.data && output.data.access_token) return output.data.access_token;
     else return null;
