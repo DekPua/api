@@ -12,7 +12,7 @@ async function getAccessToken(code) {
         client_secret: clientSecret,
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: "http://localhost:4030/auth/discord/callback",
+        redirect_uri: "https://dekpua-api.hewkawar.xyz/auth/discord/callback",
     });
 
     const output = await axios.post(`https://discord.com/api/v10/oauth2/token`,
@@ -29,17 +29,13 @@ async function getAccessToken(code) {
 router.get('/discord/callback', async (req, res) => {
     const { code } = req.query;
 
-    if (!code) return res.status(400).json({
-        error: "Invalid code"
-    });
+    if (!code) return res.redirect(`https://dekpua.hewkawar.xyz/callback?error=Invalid+code`);
 
     const accessToken = await getAccessToken(code);
 
-    if (!accessToken) return res.status(400).json({
-        error: "Session expired"
-    });
+    if (!accessToken) return res.redirect(`https://dekpua.hewkawar.xyz/callback?error=Session+expired`);
 
-    res.redirect(`http://localhost:3000/callback?access_token=${accessToken}`);
+    res.redirect(`https://dekpua.hewkawar.xyz/callback?access_token=${accessToken}`);
 });
 
 router.get('/info', async (req, res) => {
@@ -81,7 +77,7 @@ router.get('/info', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
-    res.redirect('https://discord.com/oauth2/authorize?client_id=1213460455503302716&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A4030%2Fauth%2Fdiscord%2Fcallback&scope=identify+email+guilds');
+    res.redirect('https://discord.com/oauth2/authorize?client_id=1213460455503302716&response_type=code&redirect_uri=https%3A%2F%2Fdekpua-api.hewkawar.xyz%2Fauth%2Fdiscord%2Fcallback&scope=identify+email+guilds');
 });
 
 module.exports = router;
