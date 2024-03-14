@@ -48,8 +48,6 @@ router.get('/info', async (req, res) => {
     if (access_token) {
         const accessToken = access_token
 
-        console.log(accessToken);
-
         if (!accessToken) return res.status(400).json({
             error: "Session expired"
         });
@@ -71,11 +69,6 @@ router.get('/info', async (req, res) => {
         });
 
         const isInDekPua = guilds.data.some(guild => guild.id == '1213126282921902230')
-
-        console.log({
-            user: userInfo.data,
-            dekpua: isInDekPua,
-        });
 
         return res.json({
             user: userInfo.data,
