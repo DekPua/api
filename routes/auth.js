@@ -36,7 +36,7 @@ async function revokeAccessToken(token) {
         token: token,
     });
 
-    const output = await axios.post(`https://discord.com/api/v10/oauth2/token`,
+    const output = await axios.post(`https://discord.com/api/v10/oauth2/token/revoke`,
         formData, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
