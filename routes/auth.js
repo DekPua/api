@@ -33,7 +33,7 @@ async function revokeAccessToken(token) {
     const formData = new url.URLSearchParams({
         client_id: clientId,
         client_secret: clientSecret,
-        grant_type: token,
+        token: token,
     });
 
     const output = await axios.post(`https://discord.com/api/v10/oauth2/token`,
