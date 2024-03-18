@@ -26,6 +26,27 @@ async function getAccessToken(code) {
     else return null;
 }
 
+async function revokeAccessToken(token) {
+    const clientId = process.env.CLIENT_ID;
+    const clientSecret = process.env.CLIENT_SECRET;
+
+    const formData = new url.URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: token,
+    });
+
+    const output = await axios.post(`https://discord.com/api/v10/oauth2/token`,
+        formData, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    }).catch((error) => console.error(error));
+
+    if (output && output.data) return true;
+    else return null;
+}
+
 router.get('/discord/callback', async (req, res) => {
     const { code } = req.query;
 
@@ -78,6 +99,27 @@ router.get('/info', async (req, res) => {
 
 router.get('/login', async (req, res) => {
     res.redirect('https://discord.com/oauth2/authorize?client_id=1213460455503302716&response_type=code&redirect_uri=https%3A%2F%2Fdekpua-api.hewkawar.xyz%2Fauth%2Fdiscord%2Fcallback&scope=identify+email+guilds');
+});
+
+router.get('/logout', async (req, res) => {
+    const { access_token } = req.query;
+
+    const callbackUrl = new URL('https://dekpua.hewkawar.xyz/callback');
+
+    if (!access_token) {
+        callbackUrl.searchParams.set('error', "Invalid access_token");
+        return res.redirect(callbackUrl.toString());
+    };
+
+    const revoked = await revokeAccessToken(access_token);
+
+    if (!revoked) {
+        callbackUrl.searchParams.set('error', "Can't Revoke Token");
+        return res.redirect(callbackUrl.toString());
+    };
+
+    callbackUrl.searchParams.set('logout', true);
+    res.redirect(callbackUrl.toString());
 });
 
 module.exports = router;
