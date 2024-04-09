@@ -90,7 +90,12 @@ router.get('/list', async (req, res) => {
     const channels = [];
 
     data.forEach(raw => {
-        channels.push(raw.channel_id);
+        const data = {
+            channelId: raw.channel_id,
+            reaction: raw.reaction
+        }
+        
+        channels.push(data);
     });
 
     return res.status(200).json({
