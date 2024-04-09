@@ -94,7 +94,7 @@ router.get('/list', async (req, res) => {
             channelId: raw.channel_id,
             reaction: raw.reaction
         }
-        
+
         channels.push(data);
     });
 
